@@ -1,63 +1,9 @@
-# My code
+# Merge K Sorted Lists
 
-```cpp
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <utility>
-
-using namespace std;
-
-// Definition for singly-linked list.
-struct ListNode {
-     int val;
-     ListNode *next;
-     ListNode() : val(0), next(nullptr) {}
-     ListNode(int x) : val(x), next(nullptr) {}
-     ListNode(int x, ListNode *next) : val(x), next(next) {}
-};
-
-class Solution {
-public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* dummy = new ListNode(-1);
-        ListNode* current = dummy;
-
-        // Custom comparator for the priority queue
-        auto compare = [](const pair<int, int>& a, const pair<int, int>& b) {
-            return a.first > b.first || (a.first == b.first && a.second > b.second);
-        };
-
-        priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(compare)> pq(compare);
-
-        // Push the head of each list into the priority queue
-        for (int i = 0; i < lists.size(); ++i) {
-            if (lists[i]) {
-                pq.emplace(lists[i]->val, i);
-                lists[i] = lists[i]->next;
-            }
-        }
-
-        while (!pq.empty()) {
-            auto [val, idx] = pq.top(); // structured bindings (C++17 feature)
-            pq.pop();
-            current->next = new ListNode(val);
-            current = current->next;
-
-            if (lists[idx]) {
-                pq.emplace(lists[idx]->val, idx);
-                lists[idx] = lists[idx]->next;
-            }
-        }
-
-        ListNode* head = dummy->next;
-        delete dummy;
-        return head;
-    }
-};
-```
-
-***
+<!-- toc -->
+- [Merge K Sorted Lists](#merge-k-sorted-lists)
+  - [Talk about the "Custom comparator"](#talk-about-the-custom-comparator)
+  - [Clarify the `pair`, `map`, `unordered_map` and `set`](#clarify-the-pair-map-unordered_map-and-set)
 
 ## Talk about the "Custom comparator"
 
@@ -105,14 +51,8 @@ public:
    priority_queue<...> pq(compare);
    ```
 
-   - `priority_queue` is a template class. You provide type parameters inside the angle brackets `<...>`.
+   - `priority_queue` is a template class. We provide type parameters inside the angle brackets `<...>`.
    - The constructor `pq(compare)` initializes the priority queue with the `compare` function as the comparator.
-
-4. **using namespace std;**:
-
-   This directive allows you to use classes, functions, and objects from the `std` namespace without prefixing them with `std::`. For example, you can write `vector` instead of `std::vector`.
-
-I hope this clarifies the syntax for you! If you have any more questions about specific syntax or need further elaboration, let me know.
 
 ***
 
@@ -134,7 +74,7 @@ std::pair<int, std::string> p = {1, "one"};
 - **Header File**: `<map>`
 - **Description**: `std::map` is an associative container that associates values with keys, allowing fast retrieval of the value given the key. The keys are sorted, and each key can appear only once.
 - **Complexity**:
-- **Insert, Delete, Find**: These operations run in O(log n) time due to the Red-Black tree structure internally.
+- **Insert, Delete, Find**: These operations run in \(O(log n)\) time due to the Red-Black tree structure internally.
 - **Use Cases**: Useful when we need to store and retrieve data associated with a unique key, especially when the order of the keys is essential. It's particularly handy when frequent lookups based on a key are needed.
 - **Example**:
 
@@ -148,8 +88,8 @@ ageMap["Alice"] = 25;
 - **Header File**: `<unordered_map>`
 - **Description**: Like `std::map`, it associates keys with values. However, it uses hashing, meaning the keys aren't stored in any particular order, but retrieval can be faster.
 - **Complexity**:
-  - **Insert, Delete, Find (average)**: O(1) since it uses hashing.
-  - **Insert, Delete, Find (worst-case)**: O(n) if many keys collide to the same hash value. (Hash Collision)
+  - **Insert, Delete, Find (average)**: \(O(1)\) since it uses hashing.
+  - **Insert, Delete, Find (worst-case)**: \(O(n)\) if many keys collide to the same hash value. *(Hash Collision)*
 
 - **Use Cases**: When rapid average-case operations are vital and there's no need to maintain order.
 - **Example**:
@@ -164,7 +104,7 @@ ageMap["Bob"] = 30;
 - **Header File**: `<set>`
 - **Description**: `std::set` is an associative container that contains a sorted set of unique objects of type Key. It's typically implemented as a Red-Black tree.
 - **Complexity**:
-  - **Insert, Delete, Find**: O(log n) due to its balanced tree structure.
+  - **Insert, Delete, Find**: \(O(log n)\) due to its balanced tree structure.
 - **Use Cases**: When we need a collection of unique items, and we want them to be automatically sorted as we insert them. It's also beneficial for operations like set union, intersection, and difference.
 - **Example**:
 
@@ -185,7 +125,7 @@ s.insert(1);  // won't insert since 1 already exists
 
 - **Usage**:
 
-  - If you need to store pairs of items without the need for lookups, `std::pair` is appropriate.
-  - For storing key-value pairs with fast lookups based on a key and maintaining order, you'd use `std::map`.
-  - If order isn't important but you want faster average-case lookup times, lean towards `std::unordered_map`.
+  - If we need to store pairs of items without the need for lookups, `std::pair` is appropriate.
+  - For storing key-value pairs with fast lookups based on a key and maintaining order, we'd use `std::map`.
+  - If order isn't important but we want faster average-case lookup times, lean towards `std::unordered_map`.
   - For a collection of unique items that are automatically sorted as they are inserted, `std::set` is the preferred choice.

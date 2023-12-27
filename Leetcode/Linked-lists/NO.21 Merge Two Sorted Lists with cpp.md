@@ -1,61 +1,39 @@
 # Merge Two Sorted Lists with cpp
 
-## The whole code
+<!-- toc -->
+- [Merge Two Sorted Lists with cpp](#merge-two-sorted-lists-with-cpp)
+  - [Pointer: the most crucial concept (Basic Knowledge)](#pointer-the-most-crucial-concept-basic-knowledge)
+    - [What is a Pointer?](#what-is-a-pointer)
+    - [Declaring Pointers](#declaring-pointers)
+    - [Initializing Pointers](#initializing-pointers)
+    - [Dereferencing Pointers](#dereferencing-pointers)
+    - [Pointer Arithmetic](#pointer-arithmetic)
+    - [Pointers and Functions](#pointers-and-functions)
+    - [Pointer to Pointer](#pointer-to-pointer)
+    - [Null Pointer](#null-pointer)
+  - [Talk about the `*` and `->` operators](#talk-about-the--and---operators)
+  - [Understand the `if (!list1)` statement](#understand-the-if-list1-statement)
+  - [The line `ListNode* dummy = new ListNode(-1);`](#the-line-listnode-dummy--new-listnode-1)
+    - [Why `new`?](#why-new)
+    - [Dummy Node](#dummy-node)
+    - [Deleting Dynamically Allocated Memory](#deleting-dynamically-allocated-memory)
+  - [What about the `sturct` part](#what-about-the-sturct-part)
+    - [The three Constructors](#the-three-constructors)
+    - [Logic Behind Constructors](#logic-behind-constructors)
+  - [`heap` VS `stack`](#heap-vs-stack)
+    - [Stack](#stack)
+    - [Heap](#heap)
+    - [In Summary](#in-summary)
 
-```cpp
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
-class Solution {
-public:
-    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-        if (!list1) return list2;
-        if (!list2) return list1;
-        
-        ListNode* dummy = new ListNode(-1);
-        ListNode* current = dummy;
-        
-        while(list1 && list2) {
-            if(list1->val < list2->val) {
-                current->next = list1;
-                list1 = list1->next;
-            } else {
-                current->next = list2;
-                list2 = list2->next;
-            }
-            current = current->next;
-        }
-        
-        if(list1) {
-            current->next = list1;
-        } else {
-            current->next = list2;
-        }
-        
-        ListNode* result = dummy->next;
-        delete dummy;
-        
-        return result;
-    }
-};
-```
-
-### Pointer: the most crucial concept (Basic Knowledge)
+## Pointer: the most crucial concept (Basic Knowledge)
 
 Pointers are a crucial concept in languages like C and C++, and they allow us to directly interact with memory addresses.
 
-#### What is a Pointer?
+### What is a Pointer?
 
-A pointer is a variable that stores the memory address of another variable. This allows you to indirectly manipulate the data stored at that address.
+A pointer is a variable that stores the memory address of another variable. This allows us to indirectly manipulate the data stored at that address.
 
-#### Declaring Pointers
+### Declaring Pointers
 
 We declare a pointer by specifying its data type, followed by an asterisk (`*`). For example:
 
@@ -65,7 +43,7 @@ char *c; // pointer to a character
 ListNode *node; // pointer to a ListNode object
 ```
 
-#### Initializing Pointers
+### Initializing Pointers
 
 I can initialize a pointer by assigning it the address of a variable using the address-of operator (`&`):
 
@@ -74,7 +52,7 @@ int x = 10;
 int *p = &x; // p now points to x
 ```
 
-#### Dereferencing Pointers
+### Dereferencing Pointers
 
 The dereference operator (`*`) is used to access the value at the address a pointer is pointing to:
 
@@ -84,7 +62,7 @@ int *p = &x;
 int y = *p; // y will be 10, the value at the address p is pointing to
 ```
 
-#### Pointer Arithmetic
+### Pointer Arithmetic
 
 We can perform arithmetic operations on pointers. For example, incrementing a pointer (`p++`) will make it point to the next memory location for its data type.
 
@@ -94,7 +72,7 @@ int *p = arr;
 p++; // Now points to the second element (2) in arr
 ```
 
-#### Pointers and Functions
+### Pointers and Functions
 
 Pointers can be passed to functions to modify variables indirectly:
 
@@ -109,7 +87,7 @@ int main() {
 }
 ```
 
-#### Pointer to Pointer
+### Pointer to Pointer
 
 We can also have pointers to pointers, usually denoted by multiple asterisks:
 
@@ -119,9 +97,9 @@ int *p = &x;
 int **pp = &p; // pointer to pointer
 ```
 
-#### Null Pointer
+### Null Pointer
 
-A pointer that doesn't point to anything is called a null pointer. It's good practice to initialize pointers to `nullptr` if you don't have an address to assign yet:
+A pointer that doesn't point to anything is called a null pointer. It's good practice to initialize pointers to `nullptr` if we don't have an address to assign yet:
 
 ```cpp
 int *p = nullptr;
@@ -129,7 +107,7 @@ int *p = nullptr;
 
 Understanding pointers opens up a world of low-level memory manipulation and efficient data handling.
 
-### Talk about the `*` and `->` operators
+## Talk about the `*` and `->` operators
 
 In C++, the `*` and `->` operators have specific roles, especially when dealing with pointers and objects.
 
@@ -141,7 +119,7 @@ In C++, the `*` and `->` operators have specific roles, especially when dealing 
    - The `->` operator is used to access members (variables, methods) of an object through a pointer to that object.
    - Example: If I have a pointer `ListNode *node` pointing to a `ListNode` object, then `node->val` would access the `val` member variable of the object pointed to by `node`.
 
-In your code:
+In my code:
 
 - `ListNode* list1, *list2;`: Here `ListNode*` declares a pointer to a `ListNode` object. `list1` and `list2` will store the addresses of these objects.
   
@@ -149,7 +127,7 @@ In your code:
 
 - `list1 = list1->next;`: Here, `list1->next` accesses the `next` member of the object `list1` is pointing to. Then `list1 = list1->next;` updates `list1` to point to its next node.
 
-### Understand the `if (!list1)` statement
+## Understand the `if (!list1)` statement
 
 In C++, the expression `if (!list1)` is a shorthand way to check if `list1` is a null pointer.
 
@@ -164,7 +142,7 @@ Here's how it works:
 
 In the context of linked lists, checking for a null pointer is a common way to determine whether I've reached the end of the list or whether the list is empty to begin with.
 
-### The line `ListNode* dummy = new ListNode(-1);`
+## The line `ListNode* dummy = new ListNode(-1);`
 
 1. `new ListNode(-1)` dynamically allocates memory for a new `ListNode` object and initializes its value to `-1`. The `new` operator returns the address of this new object.
     · The `(-1)` in `new ListNode(-1)` is an argument being passed to a constructor of the `ListNode` class. It initializes the value of the newly created node.
@@ -195,19 +173,19 @@ In the context of linked lists, checking for a null pointer is a common way to d
 
 3. `ListNode* dummy = new ListNode(-1);` combines both actions: it declares a pointer named `dummy` and initializes it with the address of the newly allocated `ListNode` object.
 
-#### Why `new`?
+### Why `new`?
 
-The `new` operator is used to allocate memory on the heap, as opposed to the stack. Memory allocated on the heap persists outside the function call, which is crucial when you're working with data structures like linked lists that must persist across different scopes.
+The `new` operator is used to allocate memory on the heap, as opposed to the stack. Memory allocated on the heap persists outside the function call, which is crucial when we're working with data structures like linked lists that must persist across different scopes.
 
-#### Dummy Node
+### Dummy Node
 
-The `dummy` node acts as a placeholder and makes the list manipulation easier. You don't have to deal with edge cases separately (like inserting at the beginning of the list), and it simplifies the code.
+The `dummy` node acts as a placeholder and makes the list manipulation easier. We don't have to deal with edge cases separately (like inserting at the beginning of the list), and it simplifies the code.
 
-#### Deleting Dynamically Allocated Memory
+### Deleting Dynamically Allocated Memory
 
-Because `new` allocates memory on the heap, you should eventually `delete` this memory to prevent memory leaks. In the given code, `delete dummy;` performs this action, freeing the memory allocated for the `dummy` node.
+Because `new` allocates memory on the heap, we should eventually `delete` this memory to prevent memory leaks. In the given code, `delete dummy;` performs this action, freeing the memory allocated for the `dummy` node.
 
-### What about the `sturct` part
+## What about the `sturct` part
 
 ```cpp
 struct ListNode {
@@ -229,7 +207,7 @@ There are two members:
 1. `val` - an integer that stores the value of the node.
 2. `next` - a pointer to another `ListNode` that points to the next node in the linked list. If there's no next node, it's set to `nullptr`.
 
-#### The three Constructors
+### The three Constructors
 
 Constructors are special member functions that are executed whenever a new object of the structure (or class) is created. For `ListNode`, three constructors are defined to provide flexibility in creating nodes.
 
@@ -276,49 +254,49 @@ ListNode* anotherNode = new ListNode(7);
 ListNode* node = new ListNode(5, anotherNode); // Creates a node with value 5 pointing to anotherNode
 ```
 
-#### Logic Behind Constructors
+### Logic Behind Constructors
 
 The logic behind providing multiple constructors is to offer flexibility:
 
-- Sometimes you only want to set a value without worrying about the next node, so you use the single argument constructor.
-- Sometimes you want to quickly create an empty node, so you use the default constructor.
-- Other times, especially when manually building a linked list, you want to set both value and next pointer at once, so you use the two-argument constructor.
+- Sometimes we only want to set a value without worrying about the next node, so we use the single argument constructor.
+- Sometimes we want to quickly create an empty node, so we use the default constructor.
+- Other times, especially when manually building a linked list, we want to set both value and next pointer at once, so we use the two-argument constructor.
 
 By providing these options, it simplifies the creation of `ListNode` objects based on different requirements.
 
-### `heap` VS `stack`
+## `heap` VS `stack`
 
-Both the **heap** and the **stack** are areas of memory used by programs, but they serve different purposes and have different characteristics. Let's break them down:
+Both the **heap** and the **stack** are areas of memory used by programs, but they serve different purposes and have different characteristics.
 
-#### Stack
+### Stack
 
 1. **Purpose**: The stack is used for static memory allocation. It's where local variables are allocated and stored. It's also used to keep track of function calls.
 
 2. **Memory Management**: Memory is managed in a Last-In-First-Out (LIFO) manner. This means that the most recently reserved block is the first to be freed. This makes it really simple to keep track of the stack; freeing a block from the stack is a simple decrement of the stack's pointer.
 
-3. **Size**: The size of the stack is set when the program starts, and it can't be changed during the execution. This means that there's a limit to the amount of memory you can use on the stack. If you exceed this limit (like in a deep or infinite recursion), you'll get a stack overflow.
+3. **Size**: The size of the stack is set when the program starts, and it can't be changed during the execution. This means that there's a limit to the amount of memory we can use on the stack. If we exceed this limit (like in a deep or infinite recursion), we'll get a stack overflow.
 
 4. **Access Speed**: Accessing memory on the stack is very fast because the data is stored in a contiguous block of memory and managed in a LIFO manner.
 
-5. **Life Cycle**: Variables created on the stack will go out of scope and be automatically deallocated. This means you don't have to manage memory yourself; it's handled for you.
+5. **Life Cycle**: Variables created on the stack will go out of scope and be automatically deallocated. This means we don't have to manage memory yourself; it's handled for us.
 
-#### Heap
+### Heap
 
-1. **Purpose**: The heap is used for dynamic memory allocation. It's where you allocate memory for variables that you need to exist for a longer period of time than local variables.
+1. **Purpose**: The heap is used for dynamic memory allocation. It's where we allocate memory for variables that we need to exist for a longer period of time than local variables.
 
-2. **Memory Management**: You have full control over the heap, which means you're responsible for allocating memory when you need it and freeing it when you're done. This is done using operators like `new` (or `malloc` in C) to allocate and `delete` (or `free` in C) to deallocate.
+2. **Memory Management**: You have full control over the heap, which means we're responsible for allocating memory when we need it and freeing it when we're done. This is done using operators like `new` (or `malloc` in C) to allocate and `delete` (or `free` in C) to deallocate.
 
 3. **Size**: The heap is typically much larger than the stack. Its size is limited only by the size of the addressable memory.
 
 4. **Access Speed**: Accessing memory on the heap is a bit slower than the stack. Since the heap can have holes (due to the process of allocation and deallocation), finding a suitable block of memory can take a bit more time.
 
-5. **Life Cycle**: Variables created on the heap will remain there until you deallocate them or the program ends. If you forget to free memory you've allocated on the heap, it results in a memory leak.
+5. **Life Cycle**: Variables created on the heap will remain there until we deallocate them or the program ends. If we forget to free memory we've allocated on the heap, it results in a memory leak.
 
-##### In Summary
+### In Summary
 
 - **Stack**: Fast, automatic memory management, used for local variables, limited in size.
 - **Heap**: Slower, manual memory management, used for dynamically allocated variables, larger in size.
 
-Think of the **stack** as a stack of plates. When you add a plate (a local variable), it goes on top. When you're done with a plate, it gets removed from the top. You can't remove a plate from the middle or bottom without first removing the plates above it.
+Think of the **stack** as a stack of plates. When we add a plate (a local variable), it goes on top. When we're done with a plate, it gets removed from the top. We can't remove a plate from the middle or bottom without first removing the plates above it.
 
-The **heap**, on the other hand, is like a large room where you can place objects wherever you want. You have to keep track of where you've put everything, and you're responsible for cleaning up.
+The **heap**, on the other hand, is like a large room where we can place objects wherever we want. We have to keep track of where we've put everything, and we're responsible for cleaning up.
